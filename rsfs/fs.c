@@ -157,7 +157,7 @@ int fs_create(char* file_name) {
 	return 0;
   }
   // verifica se arquivo já existe no dir
-  int i=0, dirCheio = 0, espaco_dir = -1;
+  int i=0, dirCheio = 0, espaco_dir = -1, tamanhoFAT = sizeof(fat)/SECTORSIZE, tamanhoDIR = 128;
   while(i < 128){  
 	if(dir[i].used == 1){   // dir ocupado
 		dirCheio++;
@@ -197,19 +197,20 @@ int fs_create(char* file_name) {
   }
 
    // escrever as estruturas de dados necessárias
-   char *buffer = (char *) fat;
-   for (i = 0; i < 256; i++) {  // 256 = tamanho da FAT
+
+   char *buffer = (char *) dir;
+   for (i = 0; i < tamanhoDIR; i++){   //128 = tamanho do dir
+	if(bl_write(i+tamanhoFAT, &buffer[i*SECTORSIZE]) == 0)   // dúvida
+	    return 0;
+   }
+
+   buffer = (char *) fat;
+   for (i = 0; i < tamanhoFAT; i++) {  // 256 = tamanho da FAT
 	if(bl_write(i, &buffer[i*SECTORSIZE]) == 0){
             return 0;
         }
-   } 
-
-   buffer = (char *) dir;
-   for (i = 0; i < 128; i++){   //128 = tamanho do dir
-	if(bl_write(i+256, &buffer[i*SECTORSIZE]) == 0)   // dúvida
-	    return 0;
    }
-	
+ 
   return 1;
 }
 
@@ -257,4 +258,3 @@ int fs_read(char *buffer, int size, int file) {
   printf("Função não implementada: fs_read\n");
   return -1;
 }
-
