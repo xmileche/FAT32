@@ -124,14 +124,14 @@ int fs_free() {  // teste deu certo, mas tem que arrumar
 	return 0;
   }
 
-  int i=0, ocupado = 0;
+  int i=0, tamanhoTotal = bl_size() * SECTORSIZE;
   for(i = 33; i < VECTORFAT; i++)
 	if(fat[i] != 1)
-		ocupado = ocupado + 4096;
+		tamanhoTotal = tamanhoTotal - 4096;
 
   // tamanho do dispositivo em bytes = bl_size * sectorsize
-   int tamanhoLivre = (bl_size() * SECTORSIZE) - ocupado;
-  return(tamanhoLivre);
+
+  return(tamanhoTotal);
 
 }
 
