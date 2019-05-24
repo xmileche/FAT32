@@ -1,2 +1,3 @@
-# Sistema-de-Arquivos-FAT32-
-Desenvolvido para a disciplina Laboratório de Sistemas Operacionais
+# File System FAT32
+
+Developed for the discipline Operating Systems Lab.
